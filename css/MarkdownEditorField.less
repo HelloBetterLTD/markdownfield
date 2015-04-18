@@ -2,13 +2,59 @@
 
 
     .middleColumn {
-
         margin-left: 0;
         clear: both;
+        border: 1px solid #ddd;
+
+        .markdown-tabs {
+            height: 3rem;
+            line-height: 3rem;
+            background: #ddd;
+
+            a {
+                height: 3rem;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                padding: 0 1.2rem;
+                color: #000;
+                display: inline-block;
+
+                &.active {
+                    background: #fff;
+                }
+            }
+        }
 
         textarea {
-            width: 100%;
-            max-width: 100%;
+
+            &.markdowneditor {
+                // display: none;
+            }
+
+        }
+
+        .editor-holder {
+            position: relative;
+
+            .editor-div {
+                margin: 0;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
+
+        .preview-pane {
+            background: #fff;
+            padding: 1rem;
+
+            &.loading {
+                background: #fff url('/framework/admin/images/spinner.gif') no-repeat center;
+                padding: 5rem 1rem;
+            }
         }
 
     }

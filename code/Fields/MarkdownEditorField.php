@@ -9,11 +9,32 @@
 
 class MarkdownEditorField extends TextareaField {
 
+	private static $allowed_actions = array(
+		'preview'
+	);
+
 	protected $rows = 30;
 
 	function Field($properties = array()){
 		Requirements::css(MARKDOWN_BASE . '/css/MarkdownEditorField.css');
+
+		Requirements::javascript(MARKDOWN_BASE . '/thirdparty/ace/src-min-noconflict/ace.js');
+		Requirements::javascript(MARKDOWN_BASE . '/js/MarkdownEditorField.js');
+
 		return parent::Field($properties);
+	}
+
+
+	function preview(SS_HTTPRequest $request){
+		$strValue = $request->requestVar('markdown');
+		if($strValue){
+			$shortCodeParser = ShortcodeParser::get_active();
+			$strValue = $shortCodeParser->parse($strValue);
+
+			$parseDown = new Parsedown();
+			$strValue  = $parseDown->text($strValue);
+		}
+		return $strValue;
 	}
 
 } 
