@@ -8,7 +8,6 @@
  */
 
 $strMarkDownPath = dirname(__FILE__);
-require_once($strMarkDownPath . '/thirdparty/parsedown/Parsedown.php');
 
 if(!defined('MARKDOWN_BASE')){
 	$strBase = substr(str_replace(BASE_PATH, '', $strMarkDownPath), 1);
