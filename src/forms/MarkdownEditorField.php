@@ -6,6 +6,10 @@
  * Time: 11:12 AM
  * To change this template use File | Settings | File Templates.
  */
+namespace SilverStripers\markdown\forms;
+
+use SilverStripe\Forms\TextareaField;
+use SilverStripe\View\Requirements;
 
 class MarkdownEditorField extends TextareaField
 {

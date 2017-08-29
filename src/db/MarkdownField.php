@@ -6,8 +6,16 @@
  * Time: 11:11 AM
  * To change this template use File | Settings | File Templates.
  */
+namespace SilverStripers\markdown\db;
 
-class MarkdownField extends Text
+
+
+use SilverStripe\Forms\TextField;
+use SilverStripe\View\Parsers\ShortcodeParser;
+use cebe\markdown\GithubMarkdown;
+use SilverStripers\markdown\MarkdownEditorField;
+
+class DBMarkdownText extends \SilverStripe\ORM\FieldType\DBText
 {
 
     private static $escape_type = 'xml';
@@ -47,8 +55,8 @@ class MarkdownField extends Text
         $shortCodeParser = ShortcodeParser::get_active();
         $strParsed = $shortCodeParser->parse(!empty($strValue) ? $strValue : $this->value);
 
-        $parseDown = new Parsedown();
-        $strParsed  = $parseDown->text($strParsed);
+        $parseDown = new GithubMarkdown();
+        $strParsed  = $parseDown->parse($strParsed);
 
         if ($bCache) {
             $this->parsedContent = $strParsed;
