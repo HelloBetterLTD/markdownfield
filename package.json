@@ -34,6 +34,8 @@
     "react-simplemde-editor": "3.6.11"
   },
   "devDependencies": {
+    "@silverstripe/webpack-config": "0.3.0",
+    "node-sass": "^4.5.3",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "babel-polyfill": "^6.9.1",

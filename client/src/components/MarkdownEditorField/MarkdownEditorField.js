@@ -4,9 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 const SimpleMDE = require('simplemde');
 import ReactSimpleMDE from 'react-simplemde-editor';
-import InsertEmbedModal from '../../../../../asset-admin/client/src/components/InsertEmbedModal/InsertEmbedModal';
 import { provideInjector } from 'lib/Injector';
-const InjectableInsertEmbedModal = provideInjector(InsertEmbedModal);
+
 
 class MarkdownEditorField extends React.Component {
     constructor(props) {
