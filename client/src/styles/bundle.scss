@@ -1,0 +1,18 @@
+@import "../../../node_modules/react-simplemde-editor/dist/simplemde.min";
+
+
+.editor-toolbar.fullscreen {
+	z-index: 9999;
+}
+
+.CodeMirror-fullscreen {
+	z-index: 9999;
+}
+
+.editor-preview-side {
+	z-index: 9999;
+}
+
+textarea.markdowneditor {
+	display: none;
+}

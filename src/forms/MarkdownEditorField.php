@@ -9,7 +9,7 @@
 namespace SilverStripers\markdown\forms;
 
 use SilverStripe\Forms\TextareaField;
-use SilverStripe\View\Requirements;
+
 
 class MarkdownEditorField extends TextareaField
 {
@@ -22,25 +22,9 @@ class MarkdownEditorField extends TextareaField
 
     public function Field($properties = array())
     {
-        Requirements::css(MARKDOWN_BASE . '/css/MarkdownEditorField.css');
-
-        Requirements::javascript(MARKDOWN_BASE . '/thirdparty/ace/src-min-noconflict/ace.js');
-        Requirements::javascript(MARKDOWN_BASE . '/js/MarkdownEditorField.js');
-
         return parent::Field($properties);
     }
 
 
-    public function preview(SS_HTTPRequest $request)
-    {
-        $strValue = $request->requestVar('markdown');
-        if ($strValue) {
-            $shortCodeParser = ShortcodeParser::get_active();
-            $strValue = $shortCodeParser->parse($strValue);
 
-            $parseDown = new Parsedown();
-            $strValue  = $parseDown->text($strValue);
-        }
-        return $strValue;
-    }
 }

@@ -1,0 +1,6 @@
+---
+Name: markdown
+---
+SilverStripe\Admin\LeftAndMain:
+  extensions:
+    - SilverStripers\markdown\extensions\MarkdownFieldExtension
