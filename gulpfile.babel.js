@@ -37,7 +37,11 @@ gulp.task('scss:w', function () {
  *   Bundle JS files
  *   Need browserify or webpack to work
  */
-const jsFiles = path.join(__dirname, 'client/src/app/*.*');
+const jsFiles = [
+    path.join(__dirname, 'client/src/**/*.js'),
+    path.join(__dirname, 'client/src/**/**/*.js'),
+    path.join(__dirname, 'client/src/**/**/**/*.js')
+];
 
 gulp.task('js', function () {
     return gulp.src(jsFiles)
