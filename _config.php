@@ -7,9 +7,11 @@
  * To change this template use File | Settings | File Templates.
  */
 
-$strMarkDownPath = dirname(__FILE__);
 
-if(!defined('MARKDOWN_BASE')){
-	$strBase = substr(str_replace(BASE_PATH, '', $strMarkDownPath), 1);
-	define('MARKDOWN_BASE', $strBase);
+$asBase = \SilverStripe\Core\Config\Config::inst()->get(\SilverStripers\markdown\db\MarkdownText::class, 'markdown_as_base');
+if($asBase) {
+	$siteTreeDB = \SilverStripe\Core\Config\Config::inst()->get(\SilverStripe\CMS\Model\SiteTree::class, 'db');
+	$siteTreeDB['Content'] = \SilverStripers\markdown\db\MarkdownText::class;
+	\SilverStripe\Core\Config\Config::modify()
+		->set(\SilverStripe\CMS\Model\SiteTree::class, 'db', $siteTreeDB);
 }

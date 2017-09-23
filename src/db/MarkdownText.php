@@ -39,6 +39,8 @@ class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
         'NoHTML' => 'Text',
     );
 
+    private static $markdown_as_base = false;
+    
     private $parsedContent;
 
 

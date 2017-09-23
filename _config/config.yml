@@ -4,3 +4,6 @@ Name: markdown
 SilverStripe\Admin\LeftAndMain:
   extensions:
     - SilverStripers\markdown\extensions\MarkdownFieldExtension
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+   - SilverStripers\markdown\extensions\MarkdownSiteTreeExtension

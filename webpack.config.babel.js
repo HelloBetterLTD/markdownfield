@@ -1,18 +1,45 @@
 'use strict';
-import path from 'path';
-import webpack from 'webpack';
+
+const Path = require('path');
+const webpack = require('webpack');
+const webpackConfig = require('@silverstripe/webpack-config');
+const {
+    resolveJS,
+    externalJS,
+    moduleJS,
+    pluginJS,
+    moduleCSS,
+    pluginCSS,
+} = webpackConfig;
+
+const ENV = process.env.NODE_ENV;
+const PATHS = {
+    ROOT: Path.resolve(),
+    MODULES: 'node_modules',
+    FILES_PATH: '../',
+    THIRDPARTY: 'thirdparty',
+    SRC: Path.resolve('client/src'),
+};
+
 
 const config = {
     entry: {
-        bundle: path.join(__dirname, '/client/src/bundles/bundle')
+        bundle: Path.join(__dirname, '/client/src/bundles/bundle')
     },
     output: {
-        path: path.join(__dirname, '/client/dist'),
+        path: Path.join(__dirname, '/client/dist'),
         filename: '[name].min.js'
     },
+
+    resolve: resolveJS(ENV, PATHS),
+    externals: externalJS(ENV, PATHS),
+    //module: moduleJS(ENV, PATHS),
+    plugins: pluginJS(ENV, PATHS),
+    /*
     resolve: {
         extensions: ["", ".webpack.js", ".jsx", ".js"]
-    },
+    },*/
+
     module: {
         loaders: [
             {
@@ -22,6 +49,7 @@ const config = {
             }
         ]
     },
+    /*
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
@@ -32,12 +60,16 @@ const config = {
             compress: {
                 warnings: false
             }
-        })*/
-    ],
+        })* /
+    ],*/
+    /*
     externals: {
         'jquery': 'jQuery'
-    }
+    }*/
 };
 
-module.exports = config;
+//module.exports = config;
+module.exports = (process.env.WEBPACK_CHILD)
+    ? config.find((entry) => entry.name === process.env.WEBPACK_CHILD)
+    : module.exports = config;
 

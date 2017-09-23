@@ -16,7 +16,7 @@ class MarkdownEditorField extends React.Component {
                     name: "heading",
                     action: SimpleMDE.toggleHeadingSmaller,
                     className: "fa fa-header",
-                    title: "Heading",
+                    title: "Heading HTML",
                 },
                 {
                     name: "bold",
@@ -59,6 +59,23 @@ class MarkdownEditorField extends React.Component {
                 {
                     name: "link",
                     action: SimpleMDE.drawLink,
+                    /*
+                    action: function() {
+                        let dialog = jQuery('#insert-link-markdown-react__dialog-wrapper');
+
+                        if (!dialog.length) {
+                            dialog = jQuery('<div id="insert-link-markdown-react__dialog-wrapper" class="insert-link__md-dialog-wrapper" />');
+                            jQuery('body').append(dialog);
+                            dialog.dialog({
+                                autoOpen: false
+                            });
+                        }
+
+                        // dialog.setElement(this);
+                        dialog.dialog("open");
+                        // $();
+                        // InsertLinkModal
+                    },*/
                     className: "fa fa-link",
                     title: "Create Link",
                 },
@@ -103,44 +120,33 @@ class MarkdownEditorField extends React.Component {
     }
 
     render() {
-        let showIcons = ["code", "table"];
-
-
-        return (
-            <div className="editor-container">
-                <ReactSimpleMDE
-                    value = {this.props.textarea.value}
-                    onChange={this.handleChange.bind(this)}
-                    options={{
-                        spellChecker: true,
-                        dragDrop: false,
-                        keyMap: "sublime",
-                        toolbar: this.state.toolbar,
-                        showIcons: {showIcons}
-                    }}
-                    ></ReactSimpleMDE>
-            </div>
-        );
+        return (<div className="editor-container">
+            <ReactSimpleMDE
+                value = {this.props.textarea.value}
+                onChange={this.handleChange.bind(this)}
+                options={{
+                    spellChecker: true,
+                    dragDrop: false,
+                    keyMap: "sublime",
+                    toolbar: this.state.toolbar
+                }}
+                ></ReactSimpleMDE>
+        </div>);
     }
 }
 
 jQuery.entwine('ss', ($) => {
     $('.js-markdown-container:visible').entwine({
-
         onunmatch() {
             this._super();
             ReactDOM.unmountComponentAtNode(this[0]);
         },
-
         onmatch() {
             this._super();
             this.refresh();
         },
-
         refresh() {
             let textArea = $(this).parent().find('textarea')[0];
-
-
             ReactDOM.render(
                 <MarkdownEditorField textarea={textArea}></MarkdownEditorField>,
                 this[0]
