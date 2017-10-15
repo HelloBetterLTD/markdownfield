@@ -105,30 +105,20 @@ jQuery.entwine('ss', ($) => {
             },
             {
                 name: "image",
-                //action: SimpleMDE.drawImage,
-
                  action: function(editor) {
-                     /*
                      if(window.InsertMediaModal) {
-                         let dialog = $('#insert-md-embed-react__dialog-wrapper');
-
+                         let dialog = $('#insert-md-media-react__dialog-wrapper');
                          if (!dialog.length) {
-                         dialog = $('<div id="insert-md-embed-react__dialog-wrapper" />');
-                         $('body').append(dialog);
-                         //dialog.dialog({
-                         //    autoOpen: false
-                         // });
+                             dialog = $('<div id="insert-md-media-react__dialog-wrapper" />');
+                             $('body').append(dialog);
                          }
-
-                         console.log(dialog);
-
                          dialog.setElement(editor);
                          dialog.open();
                      }
                      else {
                         SimpleMDE.drawImage(editor);
                      }
-                     */
+
                  },
                 className: "fa fa-picture-o",
                 title: "Insert Image",

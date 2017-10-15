@@ -5,9 +5,7 @@ import ReactDOM from 'react-dom';
 
 import { ApolloProvider } from 'react-apollo';
 import { provideInjector } from 'lib/Injector';
-import InsertEmbedModal from '../../../../asset-admin/client/src/components/InsertEmbedModal/InsertEmbedModal';
-
-const InjectableInsertEmbedModal = provideInjector(InsertEmbedModal);
+const InjectableInsertEmbedModal = provideInjector(window.InsertEmbedModal.default);
 
 jQuery.entwine('ss', ($) => {
 
@@ -41,7 +39,7 @@ jQuery.entwine('ss', ($) => {
          * @param {boolean} show
          * @private
          */
-        _renderModal(show) { // alert('test');
+        _renderModal(show) {
             const handleHide = () => this.close();
             const handleInsert = (...args) => this._handleInsert(...args);
             const handleCreate = (...args) => this._handleCreate(...args);
@@ -55,7 +53,6 @@ jQuery.entwine('ss', ($) => {
             <ApolloProvider store={store} client={client}>
                 <InjectableInsertEmbedModal
                     show={show}
-                    type="insert-media"
                     onCreate={handleCreate}
                     onInsert={handleInsert}
                     onHide={handleHide}
@@ -167,8 +164,17 @@ jQuery.entwine('ss', ($) => {
             let pos = $field.codemirror.getCursor();
             $field.codemirror.setSelection(pos, pos);
             $field.codemirror.replaceSelection("\n" + $('<div />').append(base.clone()).html() + "\n");
+            updateTextarea();
             return true;
         },
+
+
+        updateTextarea()
+        {
+            const $field = this.getElement();
+            $($field.element).closest('.js-markdown-holder')
+                .find('textarea.markdowneditor').val($field.value());
+        }
 
     });
 
