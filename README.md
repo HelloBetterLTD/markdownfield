@@ -23,7 +23,8 @@ To use the markdown DB field in your data objects the basic code would look like
 
 ```
 
-class MyDataClass extends DataObject {
+class MyDataClass extends DataObject
+{
 
     private static $db = array(
 		'MarkdownContent'		=> '\SilverStripers\markdown\db\MarkdownText'
@@ -37,15 +38,15 @@ MarkdownText knows to add a markdown editor for your fields, but if you need to 
 
 ```
 public function getCMSFields()
-	{
-		$fields = parent::getCMSFields();
+{
+    $fields = parent::getCMSFields();
 
-		$fields->addFieldsToTab('Root.Sidebar', array(
-			\SilverStripers\markdown\forms\MarkdownEditorField::create('MarkdownContent', 'Content'),
-		));
+    $fields->addFieldsToTab('Root.Sidebar', array(
+        \SilverStripers\markdown\forms\MarkdownEditorField::create('MarkdownContent', 'Content'),
+    ));
 
-		return $fields;
-	}
+    return $fields;
+}
 ```
 
 There is an option to completely replace the HTMLText fields from a CMS by using the following config
