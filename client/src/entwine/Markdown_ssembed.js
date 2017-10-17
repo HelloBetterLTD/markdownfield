@@ -127,44 +127,17 @@ jQuery.entwine('ss', ($) => {
             }
 
             const data = this.getData();
-
-            const base = jQuery('<div/>')
-                .attr('data-url', data.Url)
-                .attr('data-shortcode', 'embed')
-                .addClass(data.Placement)
-                .addClass('embed');
-
-
-            const placeholder = jQuery('<img />')
-                .attr('src', data.PreviewUrl)
-                .addClass('placeholder');
-
-            // Set dimensions
-            if (data.Width) {
-                base.width(data.Width);
-                placeholder.attr('width', data.Width);
-            }
-            if (data.Height) {
-                // Note: Leave height auto sizing on parent, but set height on inner placeholder
-                placeholder.attr('height', data.Height);
-            }
-
-            // Add caption p tag
-            if (data.CaptionText) {
-                const caption = jQuery('<p />')
-                    .addClass('caption')
-                    .text(data.CaptionText);
-                base.append(caption);
-            }
-
-
-            // Add to base
-            base.append(placeholder);
-
+            let shortcode = '[embed ' +
+                'url="' + data.Url + '" ' +
+                'thumbnail="' + data.PreviewUrl + '" ' +
+                'width="' + data.Width + '" ' +
+                'height="' + data.Height + '" ' +
+                ']';
+            
             let pos = $field.codemirror.getCursor();
             $field.codemirror.setSelection(pos, pos);
-            $field.codemirror.replaceSelection("\n" + $('<div />').append(base.clone()).html() + "\n");
-            updateTextarea();
+            $field.codemirror.replaceSelection("\n" + shortcode + "\n");
+            this.updateTextarea();
             return true;
         },
 

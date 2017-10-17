@@ -42,6 +42,7 @@ class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
     private static $markdown_as_base = false;
     
     private $parsedContent;
+    private $shortcodes = array();
 
 
     /**
@@ -54,17 +55,37 @@ class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
             return $this->parsedContent;
         }
 
-        $shortCodeParser = ShortcodeParser::get_active();
-        $strParsed = $shortCodeParser->parse(!empty($strValue) ? $strValue : $this->value);
+        $parsed = !empty($strValue) ? $strValue : $this->value;
 
-        $parseDown = new GithubMarkdown();
-        $strParsed  = $parseDown->parse($strParsed);
+        $this->shortcodes = array();
 
-        if ($bCache) {
-            $this->parsedContent = $strParsed;
+        // shortcodes
+        $regexes = array(
+            '/\[image_link*\s[a-z|A-Z|0-9\s\=]*\]/',
+            '/\[file_link\,[a-z|A-Z|0-9\s\=]*\]/'
+        );
+        
+        foreach ($regexes as $pattern) {
+            preg_match_all($pattern, $parsed, $matches);
+            if(!empty($matches[0])) foreach ($matches[0] as $attachment) {
+                $this->shortcodes[md5($attachment)] = $attachment;
+                $parsed = str_replace($attachment, md5($attachment), $parsed);
+            }
         }
 
-        return $strParsed;
+        $parseDown = new GithubMarkdown();
+        $parsed  = $parseDown->parse($parsed);
+
+        foreach ($this->shortcodes as $key => $shortcode) {
+            $parsed = str_replace($key, $shortcode, $parsed);
+        }
+
+
+        $shortCodeParser = ShortcodeParser::get_active();
+        $parsed = $shortCodeParser->parse($parsed);
+
+        $this->parsedContent = $parsed;
+        return $parsed;
     }
 
 

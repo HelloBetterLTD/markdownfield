@@ -169,7 +169,7 @@ jQuery.entwine('ss', ($) => {
             const $field = this.getElement();
             const data = this.getData();
             let linkText = data.title || data.filename;
-            let markdown = '[' + linkText + '](' + data.url + ')';
+            let markdown = '[' + linkText + ']([file_link,id='+ data.ID +'])';
 
             let pos = $field.codemirror.getCursor();
             $field.codemirror.setSelection(pos, pos);
@@ -188,14 +188,13 @@ jQuery.entwine('ss', ($) => {
             if (!$field) {
                 return false;
             }
-
-            const attrs = this.getAttributes();
+            const data = this.getData();
             const extraData = this.getExtraData();
 
             let markdown = '!['
-                + (extraData.CaptionText ? extraData.CaptionText : attrs.title)
-                + ']('+ attrs.src +' "'
-                + attrs.title
+                + (extraData.CaptionText ? extraData.CaptionText : data.title)
+                + ']([image_link id=' + data.ID +' width=' + data.width + ' height=' + data.height + '] "'
+                + data.title
                 + '")';
 
             let pos = $field.codemirror.getCursor();

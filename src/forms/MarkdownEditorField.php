@@ -36,22 +36,13 @@ class MarkdownEditorField extends TextareaField
     {
         if ($record->hasField($this->name) && $record->escapeTypeForField($this->name) != 'xml') {
             throw new Exception(
-                'HTMLEditorField->saveInto(): This field should save into a HTMLText or HTMLVarchar field.'
+                'MarkdownEditorField->saveInto(): This field should save into a MarkdownText field.'
             );
         }
 
-        // Sanitise if requested
-        $htmlValue = HTMLValue::create($this->Value());
-        if (HTMLEditorField::config()->sanitise_server_side) {
-            $santiser = HTMLEditorSanitiser::create(HTMLEditorConfig::get_active());
-            $santiser->sanitise($htmlValue);
-        }
-
-        // optionally manipulate the HTML after a TinyMCE edit and prior to a save
-        $this->extend('processHTML', $htmlValue);
-
-        // Store into record
-        $record->{$this->name} = $htmlValue->getContent();
+        $markdownValue = $this->Value();
+        $this->extend('processHTML', $markdownValue);
+        $record->{$this->name} = $markdownValue;
     }
 
 
