@@ -25,7 +25,36 @@ class MarkdownEditorField extends TextareaField
         'preview'
     );
 
+    protected $editorConfig = null;
+
     protected $rows = 30;
+
+    public function setEditorConfig(MarkdownEditorConfig $configs)
+    {
+        $this->editorConfig = $configs;
+        return $this;
+    }
+
+    public function getEditorConfig()
+    {
+        // Instance override
+        if ($this->editorConfig instanceof MarkdownEditorConfig) {
+            return $this->editorConfig;
+        }
+        // Get named / active config
+        return MarkdownEditorConfig::get($this->editorConfig);
+    }
+
+    public function getAttributes()
+    {
+        $attributes = [];
+        return array_merge(
+            $attributes,
+            parent::getAttributes(),
+            $this->getEditorConfig()->getAttributes()
+        );
+    }
+
 
     public function Field($properties = array())
     {
