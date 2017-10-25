@@ -6,47 +6,51 @@
  * Time: 11:11 AM
  * To change this template use File | Settings | File Templates.
  */
+
 namespace SilverStripers\markdown\db;
 
-
-
-use SilverStripe\Forms\TextField;
-use SilverStripe\View\Parsers\ShortcodeParser;
 use cebe\markdown\GithubMarkdown;
-use SilverStripers\markdown\MarkdownEditorField;
+use SilverStripe\Forms\FormField;
+use SilverStripe\Forms\NullableField;
+use SilverStripe\Forms\TextareaField;
+use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\FieldType\DBText;
+use SilverStripe\View\Parsers\ShortcodeParser;
+use SilverStripers\markdown\forms\MarkdownEditorField;
 
-class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
+class MarkdownText extends DBText
 {
-
     private static $escape_type = 'xml';
 
-    private static $casting = array(
-        "AbsoluteLinks"         => "HTMLText",
-        "BigSummary"            => "HTMLText",
-        "ContextSummary" => "HTMLText",
-        "FirstParagraph" => "HTMLText",
-        "FirstSentence" => "HTMLText",
-        "LimitCharacters" => "HTMLText",
-        "LimitSentences" => "HTMLText",
-        "Lower" => "HTMLText",
-        "LowerCase" => "HTMLText",
-        "Summary" => "HTMLText",
-        "Upper" => "HTMLText",
-        "UpperCase" => "HTMLText",
-        'EscapeXML' => 'HTMLText',
-        'LimitWordCount' => 'HTMLText',
+    private static $casting = [
+        'AbsoluteLinks'     => 'HTMLText',
+        'BigSummary'        => 'HTMLText',
+        'ContextSummary'    => 'HTMLText',
+        'FirstParagraph'    => 'HTMLText',
+        'FirstSentence'     => 'HTMLText',
+        'LimitCharacters'   => 'HTMLText',
+        'LimitSentences'    => 'HTMLText',
+        'Lower'             => 'HTMLText',
+        'LowerCase'         => 'HTMLText',
+        'Summary'           => 'HTMLText',
+        'Upper'             => 'HTMLText',
+        'UpperCase'         => 'HTMLText',
+        'EscapeXML'         => 'HTMLText',
+        'LimitWordCount'    => 'HTMLText',
         'LimitWordCountXML' => 'HTMLText',
-        'NoHTML' => 'Text',
-    );
+        'NoHTML'            => 'Text',
+    ];
 
     private static $markdown_as_base = false;
-    
+
     private $parsedContent;
-    private $shortcodes = array();
+    private $shortcodes = [];
 
 
     /**
-     * @return string
+     * @param bool $bCache
+     * @param string $strValue
+     * @return string parse contents of the markdown field to tempates
      * parse contents of the markdown field to tempates
      */
     public function ParseMarkdown($bCache = true, $strValue = '')
@@ -57,24 +61,26 @@ class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
 
         $parsed = !empty($strValue) ? $strValue : $this->value;
 
-        $this->shortcodes = array();
+        $this->shortcodes = [];
 
         // shortcodes
-        $regexes = array(
+        $regexes = [
             '/\[image_link*\s[a-z|A-Z|0-9\s\=]*\]/',
             '/\[file_link\,[a-z|A-Z|0-9\s\=]*\]/'
-        );
-        
+        ];
+
         foreach ($regexes as $pattern) {
             preg_match_all($pattern, $parsed, $matches);
-            if(!empty($matches[0])) foreach ($matches[0] as $attachment) {
-                $this->shortcodes[md5($attachment)] = $attachment;
-                $parsed = str_replace($attachment, md5($attachment), $parsed);
+            if (!empty($matches[0])) {
+                foreach ($matches[0] as $attachment) {
+                    $this->shortcodes[md5($attachment)] = $attachment;
+                    $parsed = str_replace($attachment, md5($attachment), $parsed);
+                }
             }
         }
 
         $parseDown = new GithubMarkdown();
-        $parsed  = $parseDown->parse($parsed);
+        $parsed = $parseDown->parse($parsed);
 
         foreach ($this->shortcodes as $key => $shortcode) {
             $parsed = str_replace($key, $shortcode, $parsed);
@@ -85,9 +91,9 @@ class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
         $parsed = $shortCodeParser->parse($parsed);
 
         $this->parsedContent = $parsed;
+
         return $parsed;
     }
-
 
 
     /**
@@ -117,18 +123,6 @@ class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
         return new MarkdownEditorField($this->name, $title);
     }
 
-
-    /**
-     * @param null $title
-     * @param null $params
-     * @return FormField|TextField
-     */
-    public function scaffoldSearchField($title = null, $params = null)
-    {
-        return new TextField($this->name, $title);
-    }
-
-
     /**
      * @return string
      */
@@ -143,6 +137,7 @@ class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
     public function Upper()
     {
         $strValue = strtoupper($this->__toString());
+
         return $this->ParseMarkdown(false, $strValue);
     }
 
@@ -161,6 +156,7 @@ class MarkdownText extends \SilverStripe\ORM\FieldType\DBText
     public function Lower()
     {
         $strValue = strtolower($this->__toString());
+
         return $this->ParseMarkdown(false, $strValue);
     }
 

@@ -9,18 +9,14 @@
 
 namespace SilverStripers\markdown\extensions;
 
-
 use SilverStripe\Core\Extension;
 use SilverStripe\View\Requirements;
 
 class MarkdownFieldExtension extends Extension
 {
-
-	public function init()
-	{
-		Requirements::javascript('silverstripers/silverstripe-markdown:client/dist/bundle.min.js');
-		Requirements::css('silverstripers/silverstripe-markdown:client/dist/bundle.min.css');
-
-	}
-
+    public function init()
+    {
+        Requirements::javascript('silverstripers/silverstripe-markdown:client/dist/bundle.min.js');
+        Requirements::css('silverstripers/silverstripe-markdown:client/dist/bundle.min.css');
+    }
 }
