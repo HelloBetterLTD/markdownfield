@@ -6,4 +6,4 @@ SilverStripe\Admin\LeftAndMain:
     - SilverStripers\markdown\extensions\MarkdownFieldExtension
 SilverStripe\CMS\Model\SiteTree:
   extensions:
-   - SilverStripers\markdown\extensions\MarkdownSiteTreeExtension
+    - SilverStripers\markdown\extensions\MarkdownSiteTreeExtension
