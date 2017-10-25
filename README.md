@@ -27,7 +27,7 @@ class MyDataClass extends DataObject
 {
 
     private static $db = array(
-		'MarkdownContent'		=> '\SilverStripers\markdown\db\MarkdownText'
+		'MarkdownContent'		=> 'MarkdownText'
 	);
 
 }
