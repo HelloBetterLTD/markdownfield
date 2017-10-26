@@ -8,16 +8,10 @@
  */
 namespace SilverStripers\markdown\forms;
 
-use SilverStripe\Assets\Shortcodes\ImageShortcodeProvider;
 use SilverStripe\Forms\TextareaField;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataObjectInterface;
 use Exception;
 use SilverStripe\ORM\FieldType\DBHTMLText;
-use SilverStripe\View\Parsers\HTMLValue;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorSanitiser;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
 
 class MarkdownEditorField extends TextareaField
 {

@@ -13,6 +13,14 @@
         "silverstripe/framework": "^4",
         "cebe/markdown": "1.1.2"
     },
+    "autoload": {
+        "psr-4": {
+            "SilverStripers\\markdown\\db\\": "src/db",
+            "SilverStripers\\markdown\\extensions\\": "src/extensions",
+            "SilverStripers\\markdown\\forms\\": "src/forms",
+            "SilverStripers\\markdown\\shortcodes\\": "src/shortcodes"
+        }
+    },
 
     "extra": {
         "expose": [

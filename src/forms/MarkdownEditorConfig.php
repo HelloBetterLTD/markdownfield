@@ -48,7 +48,7 @@ class MarkdownEditorConfig
             'title'     => 'Strike Through',
             'action'    => 'toggleStrikethrough'
         ],
-        "|",
+        '|',
         [
             'name'      => 'quote',
             'className' => 'fa fa-quote-left',
