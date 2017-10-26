@@ -1,0 +1,79 @@
+---
+Name: markdownconfig
+---
+SilverStripers\markdown\forms\MarkdownEditorConfig:
+  settings:
+    default:
+      -
+          name: heading
+          className: 'fa fa-header'
+          title: 'Heading HTML'
+          action: toggleHeadingSmaller
+      -
+          name: bold
+          className: 'fa fa-bold'
+          title: Bold
+          action: toggleBold
+      -
+          name: italic
+          className: 'fa fa-italic'
+          title: Italic
+          action: toggleItalic
+      -
+          name: strikethrough
+          className: 'fa fa-strikethrough'
+          title: 'Strike Through'
+          action: toggleStrikethrough
+      - '|'
+      -
+          name: quote
+          className: 'fa fa-quote-left'
+          title: Quote
+          action: toggleBlockquote
+      -
+          name: unordered-list
+          action: toggleUnorderedList
+          className: 'fa fa-list-ul'
+          title: 'Generic List'
+      -
+          name: ordered-list
+          action: toggleOrderedList
+          className: 'fa fa-list-ol'
+          title: 'Ordered List'
+      -
+          name: link
+          action: drawLink
+          className: 'fa fa-link'
+          title: 'Create Link'
+      -
+          name: embed
+          action: ssEmbed
+          className: 'fa fa-play'
+          title: 'Embed Media'
+      -
+          name: image
+          action: ssImage
+          className: 'fa fa-picture-o'
+          title: 'Insert Image'
+      - '|'
+      -
+          name: preview
+          action: togglePreview
+          className: 'fa fa-eye no-disable'
+          title: 'Toggle Preview'
+      -
+          name: side-by-side
+          action: toggleSideBySide
+          className: 'fa fa-columns no-disable no-mobile'
+          title: 'Toggle Side by Side'
+      -
+          name: fullscreen
+          action: toggleFullScreen
+          className: 'fa fa-arrows-alt no-disable no-mobile'
+          title: 'Toggle Fullscreen'
+      - '|'
+      -
+          name: guide
+          action: 'https://simplemde.com/markdown-guide'
+          className: 'fa fa-question-circle'
+          title: Help
