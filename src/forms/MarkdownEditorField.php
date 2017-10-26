@@ -13,6 +13,7 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataObjectInterface;
 use Exception;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\Parsers\HTMLValue;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorSanitiser;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
@@ -20,21 +21,27 @@ use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
 
 class MarkdownEditorField extends TextareaField
 {
-
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'preview'
-    );
+    ];
 
     protected $editorConfig = null;
 
     protected $rows = 30;
 
+    /**
+     * @param MarkdownEditorConfig $configs
+     * @return $this
+     */
     public function setEditorConfig(MarkdownEditorConfig $configs)
     {
         $this->editorConfig = $configs;
         return $this;
     }
 
+    /**
+     * @return mixed|null|MarkdownEditorConfig
+     */
     public function getEditorConfig()
     {
         // Instance override
@@ -45,6 +52,9 @@ class MarkdownEditorField extends TextareaField
         return MarkdownEditorConfig::get($this->editorConfig);
     }
 
+    /**
+     * @return array
+     */
     public function getAttributes()
     {
         $attributes = [];
@@ -55,15 +65,22 @@ class MarkdownEditorField extends TextareaField
         );
     }
 
-
-    public function Field($properties = array())
+    /**
+     * @param array $properties
+     * @return DBHTMLText
+     */
+    public function Field($properties = [])
     {
         return parent::Field($properties);
     }
 
+    /**
+     * @param DataObjectInterface $record
+     * @throws Exception
+     */
     public function saveInto(DataObjectInterface $record)
     {
-        if ($record->hasField($this->name) && $record->escapeTypeForField($this->name) != 'xml') {
+        if ($record->hasField($this->name) && $record->escapeTypeForField($this->name) !== 'xml') {
             throw new Exception(
                 'MarkdownEditorField->saveInto(): This field should save into a MarkdownText field.'
             );
@@ -73,7 +90,4 @@ class MarkdownEditorField extends TextareaField
         $this->extend('processHTML', $markdownValue);
         $record->{$this->name} = $markdownValue;
     }
-
-
-
 }
