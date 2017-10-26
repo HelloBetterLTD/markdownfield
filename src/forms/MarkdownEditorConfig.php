@@ -9,6 +9,7 @@
 
 namespace SilverStripers\markdown\forms;
 
+use SilverStripe\Core\Config\Config_ForClass;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injectable;
@@ -135,7 +136,7 @@ class MarkdownEditorConfig
      */
     public static function get_active_identifier()
     {
-        return static::$current ?: static::config()->get('default_config');
+        return static::config()->get('current') ?: static::config()->get('default_config');
     }
 
     /**
@@ -148,11 +149,11 @@ class MarkdownEditorConfig
 
     /**
      * @param MarkdownEditorConfig $config
-     * @return MarkdownEditorConfig
+     * @return Config_ForClass
      */
     public static function set_active(MarkdownEditorConfig $config)
     {
-        return static::get_active_identifier();
+        return static::config()->update('current', $config);
     }
 
     /**
