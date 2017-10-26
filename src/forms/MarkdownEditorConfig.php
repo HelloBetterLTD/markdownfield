@@ -143,7 +143,7 @@ class MarkdownEditorConfig
      */
     public static function get_active()
     {
-        return static::get_active_identifier();
+        return self::get(static::get_active_identifier());
     }
 
     /**
