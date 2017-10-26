@@ -8,42 +8,44 @@ import { provideInjector } from 'lib/Injector';
 import jQuery from 'jquery';
 
 
+var ss = typeof window.ss !== 'undefined' ? window.ss : {};
+if(typeof ss.markdownConfigs == 'undefined') {
+    ss.markdownConfigs = {};
+}
 
 
-const markdownConfigs = {
-    readToolbarConfigs: function(feed) {
-        let data = JSON.parse(feed);
-        let toolbar = [];
+ss.markdownConfigs.readToolbarConfigs = function(feed) {
+    let data = JSON.parse(feed);
+    let toolbar = [];
 
-        for (var key in data) {
-            var element = data[key];
-            if(typeof element == 'string') {
-                toolbar.push(element);
+    for (var key in data) {
+        var element = data[key];
+        if(typeof element == 'string') {
+            toolbar.push(element);
+        }
+        else {
+            let action = element.action;
+            if(typeof SimpleMDE[element.action] !== 'undefined') {
+                toolbar.push({
+                    name            : element.name,
+                    action          : SimpleMDE[element.action],
+                    className       : element.className,
+                    title           : element.title
+                });
             }
-            else {
-                let action = element.action;
-                if(typeof SimpleMDE[element.action] !== 'undefined') {
-                    toolbar.push({
-                        name            : element.name,
-                        action          : SimpleMDE[element.action],
-                        className       : element.className,
-                        title           : element.title
-                    });
-                }
-                else if(typeof markdownConfigs[element.action] !== 'undefined') {
-                    toolbar.push({
-                        name            : element.name,
-                        action          : function(editor){
-                            markdownConfigs[action](editor);
-                        },
-                        className       : element.className,
-                        title           : element.title
-                    });
-                }
+            else if(typeof ss.markdownConfigs[element.action] !== 'undefined') {
+                toolbar.push({
+                    name            : element.name,
+                    action          : function(editor){
+                        ss.markdownConfigs[action](editor);
+                    },
+                    className       : element.className,
+                    title           : element.title
+                });
             }
         }
-        return toolbar;
     }
+    return toolbar;
 }
 
 
@@ -51,7 +53,7 @@ const markdownConfigs = {
 class MarkdownEditorField extends React.Component {
     constructor(props) {
         super(props);
-        this.state = markdownConfigs;
+        this.state = ss.markdownConfigs;
     }
 
     handleChange(value) {
@@ -59,7 +61,7 @@ class MarkdownEditorField extends React.Component {
     }
 
     static addCustomAction(key, action) {
-        markdownConfigs[key] = action;
+        ss.markdownConfigs[key] = action;
     };
 
     render() {
@@ -128,7 +130,7 @@ jQuery.entwine('ss', ($) => {
         },
         refresh() {
             let textArea = $(this).parent().find('textarea')[0];
-            let toolbar = markdownConfigs.readToolbarConfigs(textArea.dataset.config);
+            let toolbar = ss.markdownConfigs.readToolbarConfigs(textArea.dataset.config);
 
             ReactDOM.render(
                 <MarkdownEditorField textarea={textArea} toolbar={toolbar}></MarkdownEditorField>,

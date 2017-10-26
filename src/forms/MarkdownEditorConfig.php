@@ -135,6 +135,9 @@ class MarkdownEditorConfig
 		return $identifier;
 	}
 
+	/**
+	 * @return MarkdownEditorConfig
+	 */
 	public static function get_active()
 	{
 		$identifier = self::get_active_identifier();
@@ -160,6 +163,18 @@ class MarkdownEditorConfig
 	public function getConfig()
 	{
 		return $this->settings;
+	}
+
+	public function addSeparator()
+	{
+		array_push($this->settings, '|');
+		return $this;
+	}
+
+	public function addButton($button)
+	{
+		array_push($this->settings, $button);
+		return $this;
 	}
 
 	public function getAttributes()
