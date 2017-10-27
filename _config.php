@@ -7,7 +7,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Config\Config;
 use SilverStripers\markdown\db\MarkdownText;
 use SilverStripers\markdown\shortcodes\MarkdownImageShortcodeProvider;
@@ -17,12 +16,8 @@ use SilverStripe\View\Parsers\ShortcodeParser;
 
 $asBase = Config::inst()->get(MarkdownText::class, 'markdown_as_base');
 if ($asBase) {
-    $siteTreeDB = Config::inst()->get(SiteTree::class, 'db');
-    $siteTreeDB['Content'] = MarkdownText::class;
-    Config::modify()
-        ->set(SiteTree::class, 'db', $siteTreeDB);
+    Config::modify('SilverStripe\Core\Injector\Injector', 'class', MarkdownText::class);
 }
-
 
 ShortcodeParser::get('default')
     ->register('image', [ImageShortcodeProvider::class, 'handle_shortcode'])
