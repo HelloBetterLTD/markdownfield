@@ -49,7 +49,7 @@ public function getCMSFields()
 }
 ```
 
-## Force all teh fields to use Markdown
+## Force all the fields to use Markdown
 
 If you are looking to replace all the fields of HTMLText to markdown use the following configs in the config.yml.
 
