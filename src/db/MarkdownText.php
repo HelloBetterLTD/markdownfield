@@ -61,6 +61,8 @@ class MarkdownText extends DBText
 
         $parsed = !empty($strValue) ? $strValue : $this->value;
 
+        $this->extend('onBeforeParseDown', $parsed);
+
         $this->shortcodes = [];
 
         // shortcodes
@@ -90,8 +92,10 @@ class MarkdownText extends DBText
         $shortCodeParser = ShortcodeParser::get_active();
         $parsed = $shortCodeParser->parse($parsed);
 
-        $this->parsedContent = $parsed;
 
+        $this->extend('onAfterParseDown', $parsed);
+
+        $this->parsedContent = $parsed;
         return $parsed;
     }
 
