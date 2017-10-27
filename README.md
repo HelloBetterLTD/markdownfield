@@ -49,12 +49,20 @@ public function getCMSFields()
 }
 ```
 
-There is an option to completely replace the HTMLText fields from a CMS by using the following config
+## Force all teh fields to use Markdown
+
+If you are looking to replace all the fields of HTMLText to markdown use the following configs in the config.yml.
+
+This should override any instances of the HTMLText replacements with MarkdownText
 
 ```
-
-SilverStripers\markdown\db\MarkdownText:
-    markdown_as_base: true
-
+---
+Name: myconfigs
+After:
+  - '#corefieldtypes'
+---
+SilverStripe\Core\Injector\Injector:
+  HTMLText:
+    class: SilverStripers\markdown\db\MarkdownText
 ```
 

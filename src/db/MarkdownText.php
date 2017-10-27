@@ -41,8 +41,6 @@ class MarkdownText extends DBText
         'NoHTML'            => 'Text',
     ];
 
-    private static $markdown_as_base = false;
-
     private $parsedContent;
     private $shortcodes = [];
 

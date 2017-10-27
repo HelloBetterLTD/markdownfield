@@ -5,5 +5,3 @@ Name: markdownfieldtype
 SilverStripe\Core\Injector\Injector:
   MarkdownText:
     class: SilverStripers\markdown\db\MarkdownText
-  HTMLText:
-    class: SilverStripers\markdown\db\MarkdownText
