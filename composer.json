@@ -21,6 +21,7 @@
             "SilverStripers\\markdown\\shortcodes\\": "src/shortcodes"
         }
     },
+
     "extra": {
         "expose": [
             "client/dist"

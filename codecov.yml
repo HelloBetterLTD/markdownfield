@@ -1,0 +1,4 @@
+fixes:
+  - "silverstripe-markdown/src::src"
+ignore: # Ignoring irrelevant code. Default SS stuff should not be called out by Codecoverage
+  - "src/Extensions"
