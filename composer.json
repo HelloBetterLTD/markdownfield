@@ -1,5 +1,5 @@
 {
-    "name": "silverstripers/silverstripe-markdown",
+    "name": "silverstripers/markdown",
     "description": "Markdown DB field and form field for SilverStripe",
     "type": "silverstripe-vendormodule",
     "keywords": ["silverstripe", "markdown", "module"],
@@ -21,11 +21,11 @@
             "SilverStripers\\markdown\\shortcodes\\": "src/shortcodes"
         }
     },
-
     "extra": {
         "expose": [
             "client/dist"
-        ]
+        ],
+        "installer-name": "markdown"
     }
     
 }
