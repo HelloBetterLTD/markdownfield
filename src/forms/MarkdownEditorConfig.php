@@ -73,6 +73,12 @@ class MarkdownEditorConfig
         // Create new instance if unconfigured
         if (!isset(self::$configs[$identifier])) {
             self::$configs[$identifier] = static::create()->setIdentifier($identifier);
+            $settings = static::config()->get('settings');
+            if(!isset($settings[$identifier])){
+                $default = static::config()->get('default_config');
+                $settings[$identifier] = $settings[$default];
+                static::config()->set('settings', $settings);
+            }
         }
 
         return self::$configs[$identifier];
@@ -179,10 +185,9 @@ class MarkdownEditorConfig
     public function getSettings()
     {
         $settings = static::config()->get('settings');
-        $config = static::get_active_identifier();
         $toolbar = null;
-        if (isset($settings[$config])) {
-            $toolbar = $settings[$config];
+        if (isset($settings[$this->getIdentifier()])) {
+            $toolbar = $settings[$this->getIdentifier()];
         }
         else {
             // Config not found, return default
@@ -202,15 +207,10 @@ class MarkdownEditorConfig
      */
     public function addSeparator()
     {
+
         $settings = static::config()->get('settings');
-        $active = static::get_active_identifier();
-        if (is_array($settings[$active])) {
-            $settings[$active][] = '|';
-        } else {
-            $default = static::config()->get('default_config');
-            $settings[$default][] = '|';
-        }
-        static::config()->update('settings', $settings);
+        $settings[$this->getIdentifier()][] = '|';
+        static::config()->set('settings', $settings);
         return $this;
     }
     /**
@@ -220,14 +220,8 @@ class MarkdownEditorConfig
     public function addButton($button)
     {
         $settings = static::config()->get('settings');
-        $active = static::get_active_identifier();
-        if (is_array($settings[$active])) {
-            $settings[$active][] = $button;
-        } else {
-            $default = static::config()->get('default_config');
-            $settings[$default][] = $button;
-        }
-        static::config()->update('settings', $settings);
+        $settings[$this->getIdentifier()][] = $button;
+        static::config()->set('settings', $settings);
         return $this;
     }
 
