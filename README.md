@@ -14,7 +14,7 @@ The module is still under development, but soon will be ready, with link popups 
 Use composer
 
 ```
-composer require silverstripers/silverstripe-markdown dev-master
+composer require silverstripers/markdown dev-master
 ```
 
 ## Basic Usage
