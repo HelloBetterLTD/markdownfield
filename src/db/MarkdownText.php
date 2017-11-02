@@ -65,8 +65,8 @@ class MarkdownText extends DBText
 
         // shortcodes
         $regexes = [
-            '/\[image_link*\s[a-z|A-Z|0-9\s\=]*\]/',
-            '/\[file_link\,[a-z|A-Z|0-9\s\=]*\]/'
+            '/\[image_link(.+?)\]/',
+            '/\[file_link(.+?)\]/'
         ];
 
         foreach ($regexes as $pattern) {
@@ -78,6 +78,8 @@ class MarkdownText extends DBText
                 }
             }
         }
+
+
 
         $parseDown = new GithubMarkdown();
         $parsed = $parseDown->parse($parsed);

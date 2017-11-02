@@ -6,7 +6,8 @@ const SimpleMDE = require('simplemde');
 import ReactSimpleMDE from 'react-simplemde-editor';
 import { provideInjector } from 'lib/Injector';
 import jQuery from 'jquery';
-
+import ShortcodeParser from '../ShortCodeParser/ShortcodeParser';
+const parser = new ShortcodeParser();
 
 var ss = typeof window.ss !== 'undefined' ? window.ss : {};
 if(typeof ss.markdownConfigs == 'undefined') {
@@ -14,10 +15,8 @@ if(typeof ss.markdownConfigs == 'undefined') {
 }
 
 
-ss.markdownConfigs.readToolbarConfigs = function(feed) {
-    let data = JSON.parse(feed);
+ss.markdownConfigs.readToolbarConfigs = function(data) {
     let toolbar = [];
-
     for (var key in data) {
         var element = data[key];
         if(typeof element == 'string') {
@@ -48,6 +47,14 @@ ss.markdownConfigs.readToolbarConfigs = function(feed) {
     return toolbar;
 }
 
+parser.registerShortCode('image_link', function(buffer, opts) {
+    return opts.url;
+});
+
+
+parser.registerShortCode('embed', function(buffer, opts) {
+    return '<img src="' + opts.thumbnail + '" width="' + opts.width + '" height="' + opts.height + '">';
+});
 
 
 class MarkdownEditorField extends React.Component {
@@ -60,9 +67,20 @@ class MarkdownEditorField extends React.Component {
         this.props.textarea.value = value;
     }
 
+    previewRender(plainText, preview){
+        preview.classList.add('markdown-preview');
+        preview.classList.add(this.identifier);
+        let parsedText = parser.parse(plainText);
+        return this.parent.markdown(parsedText);
+    }
+
     static addCustomAction(key, action) {
         ss.markdownConfigs[key] = action;
     };
+
+    static registerShortCodes(key, callback) {
+
+    }
 
     render() {
         return (<div className="editor-container">
@@ -71,9 +89,11 @@ class MarkdownEditorField extends React.Component {
                 onChange={this.handleChange.bind(this)}
                 options={{
                     spellChecker: true,
-                        dragDrop: false,
-                        keyMap: "sublime",
-                        toolbar: this.props.toolbar
+                    dragDrop    : false,
+                    keyMap      : "sublime",
+                    toolbar     : this.props.toolbar,
+                    previewRender: this.previewRender,
+                    identifier  : this.props.identifier
                 }}
             ></ReactSimpleMDE>
         </div>);
@@ -130,10 +150,11 @@ jQuery.entwine('ss', ($) => {
         },
         refresh() {
             let textArea = $(this).parent().find('textarea')[0];
-            let toolbar = ss.markdownConfigs.readToolbarConfigs(textArea.dataset.config);
+            let data = JSON.parse(textArea.dataset.config);
+            let toolbar = ss.markdownConfigs.readToolbarConfigs(data.toolbar);
 
             ReactDOM.render(
-                <MarkdownEditorField textarea={textArea} toolbar={toolbar}></MarkdownEditorField>,
+                <MarkdownEditorField textarea={textArea} toolbar={toolbar} identifier={data.identifier}></MarkdownEditorField>,
                 this[0]
             );
         }

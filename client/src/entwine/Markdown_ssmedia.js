@@ -190,10 +190,9 @@ jQuery.entwine('ss', ($) => {
             }
             const data = this.getData();
             const extraData = this.getExtraData();
-
             let markdown = '!['
                 + (extraData.CaptionText ? extraData.CaptionText : data.title)
-                + ']([image_link id=' + data.ID +' width=' + data.width + ' height=' + data.height + '] "'
+                + ']([image_link id=' + data.ID +' width=' + data.InsertWidth + ' height=' + data.InsertHeight + ' url=\''+ data.url +'\'] "'
                 + data.title
                 + '")';
 

@@ -14,6 +14,9 @@ use SilverStripe\Core\Config\Config_ForClass;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ThemeResourceLoader;
 
 class MarkdownEditorConfig
 {
@@ -36,11 +39,22 @@ class MarkdownEditorConfig
     protected static $current;
 
     /**
+     * List of css to embed with the editors
+     * @var array
+     */
+    private static $editor_css = [];
+
+    /**
      * Default identifier for config and settings
      * @var string
      */
     private static $default_config = 'default';
 
+    /**
+     * Identifier for the current config
+     * @var string
+     */
+	private $identifier;
     /**
      * Settings for the MarkdownField
      * @var array
@@ -58,7 +72,7 @@ class MarkdownEditorConfig
         }
         // Create new instance if unconfigured
         if (!isset(self::$configs[$identifier])) {
-            self::$configs[$identifier] = static::create();
+            self::$configs[$identifier] = static::create()->setIdentifier($identifier);
         }
 
         return self::$configs[$identifier];
@@ -71,6 +85,24 @@ class MarkdownEditorConfig
     {
         return static::config()->get('current') ?: static::config()->get('default_config');
     }
+
+	/**
+	 * @param $identifier
+	 * @return $this
+	 */
+	public function setIdentifier($identifier)
+	{
+		$this->identifier = $identifier;
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIdentifier()
+	{
+		return $this->identifier;
+	}
 
     /**
      * @return MarkdownEditorConfig
@@ -112,6 +144,35 @@ class MarkdownEditorConfig
         return $config;
     }
 
+
+    /**
+     * @return array
+     */
+    public function getEditorCSS()
+    {
+        $editor = array();
+
+        // Add standard editor.css
+        $editorCSSFiles = $this->config()->get('editor_css');
+        if ($editorCSSFiles) {
+            foreach ($editorCSSFiles as $editorCSS) {
+                $path = ModuleResourceLoader::singleton()
+                    ->resolveURL($editorCSS);
+                $editor[$path] = $path;
+            }
+        }
+
+        // Themed editor.css
+        $themes = SSViewer::get_themes();
+        $themedEditor = ThemeResourceLoader::inst()->findThemedCSS('editor', $themes);
+        if ($themedEditor) {
+            $editor[$themedEditor] = $themedEditor;
+        }
+
+        return $editor;
+    }
+
+
     /**
      * @return array
      */
@@ -119,13 +180,21 @@ class MarkdownEditorConfig
     {
         $settings = static::config()->get('settings');
         $config = static::get_active_identifier();
+        $toolbar = null;
         if (isset($settings[$config])) {
-            return $settings[$config];
+            $toolbar = $settings[$config];
         }
-        // Config not found, return default
-        $default = static::config()->get('default_config');
+        else {
+            // Config not found, return default
+            $default = static::config()->get('default_config');
+            $toolbar = $settings[$default];
+        }
 
-        return $settings[$default];
+        return [
+            'toolbar'       => $toolbar,
+            'editor_css'    => $this->getEditorCSS(),
+            'identifier'	=> $this->getIdentifier()
+        ];
     }
 
     /**
@@ -142,10 +211,8 @@ class MarkdownEditorConfig
             $settings[$default][] = '|';
         }
         static::config()->update('settings', $settings);
-
         return $this;
     }
-
     /**
      * @param $button
      * @return MarkdownEditorConfig
@@ -161,9 +228,9 @@ class MarkdownEditorConfig
             $settings[$default][] = $button;
         }
         static::config()->update('settings', $settings);
-
         return $this;
     }
+
 
     /**
      * @return array

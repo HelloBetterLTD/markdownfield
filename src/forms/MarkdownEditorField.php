@@ -12,6 +12,7 @@ use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\DataObjectInterface;
 use Exception;
 use SilverStripe\ORM\FieldType\DBHTMLText;
+use SilverStripe\View\Requirements;
 
 class MarkdownEditorField extends TextareaField
 {
@@ -64,6 +65,12 @@ class MarkdownEditorField extends TextareaField
      */
     public function Field($properties = [])
     {
+        $config = $this->getEditorConfig();
+        foreach($config->getEditorCSS() as $path) {
+            Requirements::css($path);
+        }
+
+
         return parent::Field($properties);
     }
 
