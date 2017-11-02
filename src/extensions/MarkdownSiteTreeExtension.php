@@ -23,7 +23,7 @@ class MarkdownSiteTreeExtension extends DataExtension
     public function updateCMSFields(FieldList $fields)
     {
         $injectorConfig = Config::inst()->get(Injector::class, 'HTMLText');
-        if ($injectorConfig && isset($injectorConfig['class']) && $injectorConfig['class'] == MarkdownText::class) {
+        if ($injectorConfig && isset($injectorConfig['class']) && $injectorConfig['class'] === MarkdownText::class) {
             $fields->replaceField('Content', MarkdownEditorField::create('Content'));
         }
     }

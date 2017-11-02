@@ -52,10 +52,9 @@ class MarkdownEditorField extends TextareaField
      */
     public function getAttributes()
     {
-        $attributes = [];
+        $attributes = parent::getAttributes();
         return array_merge(
             $attributes,
-            parent::getAttributes(),
             $this->getEditorConfig()->getAttributes()
         );
     }

@@ -9,6 +9,7 @@
 
 namespace SilverStripers\markdown\forms;
 
+use LogicException;
 use SilverStripe\Core\Config\Config_ForClass;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
@@ -24,101 +25,41 @@ class MarkdownEditorConfig
     use Injectable;
 
 
+    /**
+     * Set of Editor configs
+     *
+     * @var array|MarkdownEditorConfig[]
+     */
     protected static $configs = [];
-    protected static $current;
-    private static $editor_css = [];
-    private static $default_config = 'default';
-	private $identifier;
 
-    protected $toolbar = [
-        [
-            'name'      => 'heading',
-            'className' => 'fa fa-header',
-            'title'     => 'Heading HTML',
-            'action'    => 'toggleHeadingSmaller'
-        ],
-        [
-            'name'      => 'bold',
-            'className' => 'fa fa-bold',
-            'title'     => 'Bold',
-            'action'    => 'toggleBold'
-        ],
-        [
-            'name'      => 'italic',
-            'className' => 'fa fa-italic',
-            'title'     => 'Italic',
-            'action'    => 'toggleItalic'
-        ],
-        [
-            'name'      => 'strikethrough',
-            'className' => 'fa fa-strikethrough',
-            'title'     => 'Strike Through',
-            'action'    => 'toggleStrikethrough'
-        ],
-        '|',
-        [
-            'name'      => 'quote',
-            'className' => 'fa fa-quote-left',
-            'title'     => 'Quote',
-            'action'    => 'toggleBlockquote'
-        ],
-        [
-            'name'      => 'unordered-list',
-            'action'    => 'toggleUnorderedList',
-            'className' => 'fa fa-list-ul',
-            'title'     => 'Generic List'
-        ],
-        [
-            'name'      => 'ordered-list',
-            'action'    => 'toggleOrderedList',
-            'className' => 'fa fa-list-ol',
-            'title'     => 'Ordered List'
-        ],
-        [
-            'name'      => 'link',
-            'action'    => 'drawLink',
-            'className' => 'fa fa-link',
-            'title'     => 'Create Link'
-        ],
-        [
-            'name'      => 'embed',
-            'action'    => 'ssEmbed',
-            'className' => 'fa fa-play',
-            'title'     => 'Embed Media'
-        ],
-        [
-            'name'      => 'image',
-            'action'    => 'ssImage',
-            'className' => 'fa fa-picture-o',
-            'title'     => 'Insert Image'
-        ],
-        '|',
-        [
-            'name'      => 'preview',
-            'action'    => 'togglePreview',
-            'className' => 'fa fa-eye no-disable',
-            'title'     => 'Toggle Preview'
-        ],
-        [
-            'name'      => 'side-by-side',
-            'action'    => 'toggleSideBySide',
-            'className' => 'fa fa-columns no-disable no-mobile',
-            'title'     => 'Toggle Side by Side'
-        ],
-        [
-            'name'      => 'fullscreen',
-            'action'    => 'toggleFullScreen',
-            'className' => 'fa fa-arrows-alt no-disable no-mobile',
-            'title'     => 'Toggle Fullscreen'
-        ],
-        '|',
-        [
-            'name'      => 'guide',
-            'action'    => 'https://simplemde.com/markdown-guide',
-            'className' => 'fa fa-question-circle',
-            'title'     => 'Help'
-        ]
-    ];
+    /**
+     * Current setting, if overridden, otherwise, default will be used
+     * @var string
+     */
+    protected static $current;
+
+    /**
+     * List of css to embed with the editors
+     * @var array
+     */
+    private static $editor_css = [];
+
+    /**
+     * Default identifier for config and settings
+     * @var string
+     */
+    private static $default_config = 'default';
+
+    /**
+     * Identifier for the current config
+     * @var string
+     */
+	private $identifier;
+    /**
+     * Settings for the MarkdownField
+     * @var array
+     */
+    protected static $settings;
 
     /**
      * @param null $identifier
@@ -138,7 +79,7 @@ class MarkdownEditorConfig
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public static function get_active_identifier()
     {
@@ -164,19 +105,26 @@ class MarkdownEditorConfig
 	}
 
     /**
-     * @return mixed
+     * @return MarkdownEditorConfig
      */
     public static function get_active()
     {
-        return self::get(static::get_active_identifier());
+        $identifier = static::get_active_identifier();
+
+        return self::get($identifier);
     }
 
     /**
-     * @param MarkdownEditorConfig $config
+     * @param string $config
      * @return Config_ForClass
+     * @throws LogicException
      */
-    public static function set_active(MarkdownEditorConfig $config)
+    public static function set_active($config)
     {
+        if (!is_string($config)) {
+            throw new LogicException('String expected for config name');
+        }
+
         return static::config()->update('current', $config);
     }
 
@@ -228,42 +176,70 @@ class MarkdownEditorConfig
     /**
      * @return array
      */
-    public function getConfig()
+    public function getSettings()
     {
+        $settings = static::config()->get('settings');
+        $config = static::get_active_identifier();
+        $toolbar = null;
+        if (isset($settings[$config])) {
+            $toolbar = $settings[$config];
+        }
+        else {
+            // Config not found, return default
+            $default = static::config()->get('default_config');
+            $toolbar = $settings[$default];
+        }
+
         return [
-            'toolbar'       => $this->toolbar,
+            'toolbar'       => $toolbar,
             'editor_css'    => $this->getEditorCSS(),
-			'identifier'	=> $this->getIdentifier()
+            'identifier'	=> $this->getIdentifier()
         ];
     }
 
-	/**
-	 * @return MarkdownEditorConfig
-	 */
-	public function addSeparator()
-	{
-		array_push($this->toolbar, '|');
-		return $this;
-	}
+    /**
+     * @return MarkdownEditorConfig
+     */
+    public function addSeparator()
+    {
+        $settings = static::config()->get('settings');
+        $active = static::get_active_identifier();
+        if (is_array($settings[$active])) {
+            $settings[$active][] = '|';
+        } else {
+            $default = static::config()->get('default_config');
+            $settings[$default][] = '|';
+        }
+        static::config()->update('settings', $settings);
+        return $this;
+    }
+    /**
+     * @param $button
+     * @return MarkdownEditorConfig
+     */
+    public function addButton($button)
+    {
+        $settings = static::config()->get('settings');
+        $active = static::get_active_identifier();
+        if (is_array($settings[$active])) {
+            $settings[$active][] = $button;
+        } else {
+            $default = static::config()->get('default_config');
+            $settings[$default][] = $button;
+        }
+        static::config()->update('settings', $settings);
+        return $this;
+    }
 
-	/**
-	 * @param $button
-	 * @return MarkdownEditorConfig
-	 */
-	public function addButton($button)
-	{
-		array_push($this->toolbar, $button);
-		return $this;
-	}
 
-	/**
+    /**
      * @return array
      */
     public function getAttributes()
     {
         return [
             'data-editor' => 'markDown',
-            'data-config' => Convert::array2json($this->getConfig()),
+            'data-config' => Convert::array2json($this->getSettings()),
         ];
     }
 }
