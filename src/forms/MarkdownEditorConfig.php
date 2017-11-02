@@ -13,7 +13,6 @@ use SilverStripe\Core\Config\Config_ForClass;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Control\Director;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\View\SSViewer;
 use SilverStripe\View\ThemeResourceLoader;
@@ -29,6 +28,7 @@ class MarkdownEditorConfig
     protected static $current;
     private static $editor_css = [];
     private static $default_config = 'default';
+	private $identifier;
 
     protected $toolbar = [
         [
@@ -131,7 +131,7 @@ class MarkdownEditorConfig
         }
         // Create new instance if unconfigured
         if (!isset(self::$configs[$identifier])) {
-            self::$configs[$identifier] = static::create();
+            self::$configs[$identifier] = static::create()->setIdentifier($identifier);
         }
 
         return self::$configs[$identifier];
@@ -144,6 +144,24 @@ class MarkdownEditorConfig
     {
         return static::config()->get('current') ?: static::config()->get('default_config');
     }
+
+	/**
+	 * @param $identifier
+	 * @return $this
+	 */
+	public function setIdentifier($identifier)
+	{
+		$this->identifier = $identifier;
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getIdentifier()
+	{
+		return $this->identifier;
+	}
 
     /**
      * @return mixed
@@ -182,7 +200,7 @@ class MarkdownEditorConfig
     /**
      * @return array
      */
-    protected function getEditorCSS()
+    public function getEditorCSS()
     {
         $editor = array();
 
@@ -192,7 +210,7 @@ class MarkdownEditorConfig
             foreach ($editorCSSFiles as $editorCSS) {
                 $path = ModuleResourceLoader::singleton()
                     ->resolveURL($editorCSS);
-                $editor[] = Director::absoluteURL($path);
+                $editor[$path] = $path;
             }
         }
 
@@ -200,7 +218,7 @@ class MarkdownEditorConfig
         $themes = SSViewer::get_themes();
         $themedEditor = ThemeResourceLoader::inst()->findThemedCSS('editor', $themes);
         if ($themedEditor) {
-            $editor[] = Director::absoluteURL($themedEditor);
+            $editor[$themedEditor] = $themedEditor;
         }
 
         return $editor;
@@ -214,7 +232,8 @@ class MarkdownEditorConfig
     {
         return [
             'toolbar'       => $this->toolbar,
-            'editor_css'    => $this->getEditorCSS()
+            'editor_css'    => $this->getEditorCSS(),
+			'identifier'	=> $this->getIdentifier()
         ];
     }
 

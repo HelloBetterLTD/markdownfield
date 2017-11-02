@@ -67,7 +67,9 @@ class MarkdownEditorField extends React.Component {
         this.props.textarea.value = value;
     }
 
-    previewRender(plainText){
+    previewRender(plainText, preview){
+        preview.classList.add('markdown-preview');
+        preview.classList.add(this.identifier);
         let parsedText = parser.parse(plainText);
         return this.parent.markdown(parsedText);
     }
@@ -90,7 +92,8 @@ class MarkdownEditorField extends React.Component {
                     dragDrop    : false,
                     keyMap      : "sublime",
                     toolbar     : this.props.toolbar,
-                    previewRender: this.previewRender
+                    previewRender: this.previewRender,
+                    identifier  : this.props.identifier
                 }}
             ></ReactSimpleMDE>
         </div>);
@@ -151,7 +154,7 @@ jQuery.entwine('ss', ($) => {
             let toolbar = ss.markdownConfigs.readToolbarConfigs(data.toolbar);
 
             ReactDOM.render(
-                <MarkdownEditorField textarea={textArea} toolbar={toolbar}></MarkdownEditorField>,
+                <MarkdownEditorField textarea={textArea} toolbar={toolbar} identifier={data.identifier}></MarkdownEditorField>,
                 this[0]
             );
         }

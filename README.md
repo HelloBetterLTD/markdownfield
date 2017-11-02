@@ -66,3 +66,39 @@ SilverStripe\Core\Injector\Injector:
     class: SilverStripers\markdown\db\MarkdownText
 ```
 
+## Add preview styles
+
+You can add your own CSS styles to the editor previews. This would let the users to check how their content will be displayed before they save in.
+
+To achived this create a css file in `mysite/css/` and name it as `editor.css`.
+
+Your CSS rules have to be nested in a class so it wont affect other areas of the CMS.
+
+```
+.markdown-preview {
+    background-color: white;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.markdown-preview h1 {
+    font-size: 30px;
+}
+````
+
+If you are using a separate config and wanting to add styles to that EditorConfig you just add a new class name. This is possible because the fields adds
+the EditorConfig's identifier on to the preview pane. The below is an example for the default configs.
+
+```
+.markdown-preview.default {
+    background-color: white;
+    padding: 20px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.markdown-preview.default h1 {
+    font-size: 24px;
+    line-height: 30px;
+}
+````
