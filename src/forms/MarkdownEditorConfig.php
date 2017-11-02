@@ -13,6 +13,10 @@ use SilverStripe\Core\Config\Config_ForClass;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ThemeResourceLoader;
 
 class MarkdownEditorConfig
 {
@@ -23,9 +27,10 @@ class MarkdownEditorConfig
 
     protected static $configs = [];
     protected static $current;
+    private static $editor_css = [];
     private static $default_config = 'default';
 
-    protected $settings = [
+    protected $toolbar = [
         [
             'name'      => 'heading',
             'className' => 'fa fa-header',
@@ -173,12 +178,44 @@ class MarkdownEditorConfig
         return $config;
     }
 
+
+    /**
+     * @return array
+     */
+    protected function getEditorCSS()
+    {
+        $editor = array();
+
+        // Add standard editor.css
+        $editorCSSFiles = $this->config()->get('editor_css');
+        if ($editorCSSFiles) {
+            foreach ($editorCSSFiles as $editorCSS) {
+                $path = ModuleResourceLoader::singleton()
+                    ->resolveURL($editorCSS);
+                $editor[] = Director::absoluteURL($path);
+            }
+        }
+
+        // Themed editor.css
+        $themes = SSViewer::get_themes();
+        $themedEditor = ThemeResourceLoader::inst()->findThemedCSS('editor', $themes);
+        if ($themedEditor) {
+            $editor[] = Director::absoluteURL($themedEditor);
+        }
+
+        return $editor;
+    }
+
+
     /**
      * @return array
      */
     public function getConfig()
     {
-        return $this->settings;
+        return [
+            'toolbar'       => $this->toolbar,
+            'editor_css'    => $this->getEditorCSS()
+        ];
     }
 
 	/**
@@ -186,7 +223,7 @@ class MarkdownEditorConfig
 	 */
 	public function addSeparator()
 	{
-		array_push($this->settings, '|');
+		array_push($this->toolbar, '|');
 		return $this;
 	}
 
@@ -196,7 +233,7 @@ class MarkdownEditorConfig
 	 */
 	public function addButton($button)
 	{
-		array_push($this->settings, $button);
+		array_push($this->toolbar, $button);
 		return $this;
 	}
 

@@ -33,7 +33,8 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-simplemde-editor": "3.6.11",
-    "bootstrap": "4.0.0-beta"
+    "bootstrap": "4.0.0-beta",
+    "util": "0.10.3"
   },
   "devDependencies": {
     "@silverstripe/webpack-config": "0.3.0",
