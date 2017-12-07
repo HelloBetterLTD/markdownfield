@@ -4,8 +4,6 @@ import ReactDOM from 'react-dom';
 
 import { ApolloProvider } from 'react-apollo';
 import { provideInjector } from 'lib/Injector';
-const InjectableInsertMediaModal = provideInjector(window.InsertMediaModal.default);
-
 
 jQuery.entwine('ss', ($) => {
 
@@ -34,6 +32,10 @@ jQuery.entwine('ss', ($) => {
          * @private
          */
         _renderModal(show) {
+            const InjectableInsertMediaModal = (window.InsertMediaModal) ? provideInjector(window.InsertMediaModal.default) : false;
+            if (!InjectableInsertMediaModal) {
+                throw new Error('Media embed is not supported');
+            }
             const handleHide = () => this.close();
             const handleInsert = (...args) => this._handleInsert(...args);
             const store = window.ss.store;

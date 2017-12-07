@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 
 import { ApolloProvider } from 'react-apollo';
 import { provideInjector } from 'lib/Injector';
-const InjectableInsertEmbedModal = provideInjector(window.InsertEmbedModal.default);
 
 jQuery.entwine('ss', ($) => {
 
@@ -40,6 +39,10 @@ jQuery.entwine('ss', ($) => {
          * @private
          */
         _renderModal(show) {
+            const InjectableInsertEmbedModal = (window.InsertEmbedModal) ? provideInjector(window.InsertEmbedModal.default) : false;
+            if (!InjectableInsertMediaModal) {
+                throw new Error('Embed is not supported');
+            }
             const handleHide = () => this.close();
             const handleInsert = (...args) => this._handleInsert(...args);
             const handleCreate = (...args) => this._handleCreate(...args);
@@ -133,7 +136,7 @@ jQuery.entwine('ss', ($) => {
                 'width="' + data.Width + '" ' +
                 'height="' + data.Height + '" ' +
                 ']';
-            
+
             let pos = $field.codemirror.getCursor();
             $field.codemirror.setSelection(pos, pos);
             $field.codemirror.replaceSelection("\n" + shortcode + "\n");
@@ -152,7 +155,3 @@ jQuery.entwine('ss', ($) => {
     });
 
 });
-
-
-
-
