@@ -14,6 +14,7 @@ use SilverStripe\Core\Config\Config_ForClass;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\View\SSViewer;
 use SilverStripe\View\ThemeResourceLoader;
@@ -178,6 +179,22 @@ class MarkdownEditorConfig
         return $editor;
     }
 
+    /**
+     * @param $toolbar
+     * @return array
+     */
+    private function checkSettingsDependencies($toolbar)
+    {
+        $moduleLoader = ModuleLoader::inst();
+        $modules = array_keys($moduleLoader->getManifest()->getModules());
+        $approved = [];
+        foreach ($toolbar as $item) {
+            if(empty($item['dependsOn']) || (isset($item['dependsOn']) && in_array($item['dependsOn'], $modules))) {
+                $approved[] = $item;
+            }
+        }
+        return $approved;
+    }
 
     /**
      * @return array
@@ -196,7 +213,7 @@ class MarkdownEditorConfig
         }
 
         return [
-            'toolbar'       => $toolbar,
+            'toolbar'       => $this->checkSettingsDependencies($toolbar),
             'editor_css'    => $this->getEditorCSS(),
             'identifier'	=> $this->getIdentifier()
         ];

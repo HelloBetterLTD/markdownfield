@@ -50,11 +50,13 @@ SilverStripers\markdown\forms\MarkdownEditorConfig:
           action: ssEmbed
           className: 'fa fa-play'
           title: 'Embed Media'
+          dependsOn: 'silverstripe/asset-admin'
       -
           name: image
           action: ssImage
           className: 'fa fa-picture-o'
           title: 'Insert Image'
+          dependsOn: 'silverstripe/asset-admin'
       - '|'
       -
           name: preview

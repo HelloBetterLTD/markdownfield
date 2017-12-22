@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import { ApolloProvider } from 'react-apollo';
 import { provideInjector } from 'lib/Injector';
-const InjectableInsertMediaModal = provideInjector(window.InsertMediaModal.default);
+const InjectableInsertMediaModal = window.InsertMediaModal ? provideInjector(window.InsertMediaModal.default) : null;
 
 
 jQuery.entwine('ss', ($) => {
@@ -34,6 +34,9 @@ jQuery.entwine('ss', ($) => {
          * @private
          */
         _renderModal(show) {
+            if(!InjectableInsertMediaModal) {
+                throw new Error('Embed is not supported, Install silverstripe/asset-admin');
+            }
             const handleHide = () => this.close();
             const handleInsert = (...args) => this._handleInsert(...args);
             const store = window.ss.store;
