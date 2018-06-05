@@ -41,5 +41,7 @@ jobs:
       - run: vendor/bin/sake dev/build
 
       # run tests!
-      - run: phpdbg -qrr vendor/bin/phpunit -d memory_limit=512M --coverage-clover=coverage.xml  -vvv vendor/silverstripers/markdown/tests
+      - run: vendor/bin/phpunit -d memory_limit=512M --coverage-clover=./coverage.xml -v vendor/silverstripers/markdown/tests
+      - run: pwd
+      - run: ls -al
       - run: bash <(curl -s https://codecov.io/bash)
