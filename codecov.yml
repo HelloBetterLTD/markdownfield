@@ -1,3 +1,4 @@
-comment: false
 codecov:
-  branch: master
+  bot: "GIT"
+fixes:
+  - "markdown/src::src"
