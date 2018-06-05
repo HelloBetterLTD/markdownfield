@@ -37,9 +37,9 @@ jobs:
       - run: composer create-project silverstripe/installer:4.x-dev ~/var/www -n
       - run: composer require silverstripers/markdown:dev-master
       - run: rm phpunit.xml.dist
-      - run: cp vendor/silverstripers/silverstripe-markdown/phpunit.xml.dist .
+      - run: cp vendor/silverstripers/markdown/phpunit.xml.dist .
       - run: vendor/bin/sake dev/build
 
       # run tests!
-      - run: vendor/bin/phpunit -d memory_limit=512M --coverage-clover=coverage.xml vendor/silverstripers/silverstripe-markdown/tests
+      - run: vendor/bin/phpunit -d memory_limit=512M --coverage-clover=coverage.xml vendor/silverstripers/markdown/tests
       - run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
