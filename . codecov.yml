@@ -1,4 +1,0 @@
-codecov:
-  bot: "GIT"
-fixes:
-  - "markdown/src::src"
