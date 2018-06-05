@@ -46,4 +46,4 @@ jobs:
       - run: pwd
       - run: ls -al
       - run: cat coverage.xml
-      - run: bash <(curl -s https://codecov.io/bash)
+      - run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
