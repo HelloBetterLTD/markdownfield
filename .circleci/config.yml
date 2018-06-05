@@ -28,7 +28,6 @@ jobs:
     steps:
       # Install additional requirements
       - run: sudo apt-get update
-      - run: sudo apt-get update
       - run: sudo apt-get install php5-phpdbg
           command: | 
             php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
