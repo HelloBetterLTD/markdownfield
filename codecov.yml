@@ -1,7 +1,3 @@
-fixes:
-  - "silverstripe/src::src"
-ignore: # Ignoring irrelevant code. Default SS stuff should not be called out by Codecoverage
-  - "src/Extensions"
 comment: false
 codecov:
   branch: master
