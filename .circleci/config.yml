@@ -42,4 +42,4 @@ jobs:
 
       # run tests!
       - run: vendor/bin/phpunit -d memory_limit=512M --coverage-clover=coverage.xml vendor/silverstripers/markdown/tests
-      - run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
+      - run: bash <(curl -s https://codecov.io/bash)
