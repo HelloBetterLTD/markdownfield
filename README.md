@@ -1,5 +1,9 @@
 # MarkdownField
 
+[![CircleCI](https://circleci.com/gh/SilverStripers/markdownfield/tree/master.svg?style=svg)](https://circleci.com/gh/SilverStripers/markdownfield/tree/master)
+[![codecov](https://codecov.io/gh/SilverStripers/markdownfield/branch/master/graph/badge.svg)](https://codecov.io/gh/SilverStripers/markdownfield)
+
+
 This module introduces a new DB field type Markdown & Markdown Editor. It uses github style Markdown style. And uses the simple markdown
 editor.
 
