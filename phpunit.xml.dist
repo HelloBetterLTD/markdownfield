@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/silverstripe/framework/tests/bootstrap.php" colors="true">
     <testsuite name="markdown">
-        <directory>vendor/silverstripers/markdown/tests/</directory>
+        <directory>tests/</directory>
     </testsuite>
 
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">vendor/silverstripers/markdown/src/</directory>
-            <file>vendor/silverstripers/markdown/src/</file>
+            <directory suffix=".php">src/</directory>
             <exclude>
-                <directory suffix=".php">vendor/silverstripers/markdown/tests/php/</directory>
+                <directory suffix=".php">tests/php/</directory>
             </exclude>
         </whitelist>
     </filter>
