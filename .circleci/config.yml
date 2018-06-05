@@ -45,5 +45,6 @@ jobs:
       - run: vendor/bin/phpunit -d memory_limit=512M --coverage-clover=./coverage.xml -v
       - run: pwd
       - run: ls -al
+      - run: sed -i '' 's/\/root\/var\/www\/vendor\/silverstripers\/markdown\///g' coverage.xml
       - run: cat coverage.xml
       - run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
