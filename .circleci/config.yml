@@ -37,7 +37,6 @@ jobs:
       - run: composer create-project silverstripe/installer:4.x-dev ~/var/www -n
       - run: composer require silverstripers/markdown:dev-master
       - run: rm phpunit.xml.dist
-      - run: rm codecov.yml
       - run: cp vendor/silverstripers/markdown/codecov.yml .
       - run: cp vendor/silverstripers/markdown/phpunit.xml.dist .
       - run: vendor/bin/sake dev/build
