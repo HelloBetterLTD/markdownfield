@@ -37,10 +37,10 @@ class MarkdownDataObjectExtension extends DataExtension
                 $description = $field->description;
                 $attributes = $field->attributes;
 
-                $row = 30;
+                $rows = 30;
 
                 if (array_key_exists('rows', $attributes)) {
-                    $row = $attributes['rows'];
+                    $rows = $attributes['rows'];
                 }
 
                 $markdownField = MarkdownEditorField::create($name, $title)
