@@ -4,6 +4,6 @@ Name: markdown
 SilverStripe\Admin\LeftAndMain:
   extensions:
     - SilverStripers\markdown\extensions\MarkdownFieldExtension
-SilverStripe\CMS\Model\SiteTree:
+SilverStripe\ORM\DataObject:
   extensions:
-    - SilverStripers\markdown\extensions\MarkdownSiteTreeExtension
+    - SilverStripers\markdown\extensions\MarkdownDataObjectExtension
