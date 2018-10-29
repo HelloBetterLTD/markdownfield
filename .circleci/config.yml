@@ -23,7 +23,7 @@ jobs:
           - MYSQL_DATABASE=circle_test
           - MYSQL_HOST=127.0.0.1
 
-    working_directory: ~/var/www
+    working_directory: ~/var/www/project
 
     steps:
       # Install additional requirements
