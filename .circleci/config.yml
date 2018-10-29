@@ -35,7 +35,7 @@ jobs:
             php composer-setup.php --install-dir=/usr/local/bin --filename=composer
             php -r "unlink('composer-setup.php');"
 
-      - run: composer create-project silverstripe/installer:4.x-dev ~/var/www -n
+      - run: composer create-project silverstripe/installer:4.x-dev ~/var/www/project -n
       - run: composer require silverstripers/markdown:dev-master
       - run: rm phpunit.xml.dist
       - run: cp vendor/silverstripers/markdown/.codecov.yml .
