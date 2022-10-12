@@ -57,7 +57,7 @@ class MarkdownText extends DBText
             return $this->parsedContent;
         }
 
-        $parsed = !empty($strValue) ? $strValue : $this->value;
+        $parsed = strval(!empty($strValue) ? $strValue : $this->value);
 
         $this->extend('onBeforeParseDown', $parsed);
 
